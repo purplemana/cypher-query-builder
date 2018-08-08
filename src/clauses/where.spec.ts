@@ -17,5 +17,21 @@ describe('Where', () => {
         upperAge: 65,
       });
     });
+
+    it('should compile with a regular expression', () => {
+      const query = new Where({ name: /[A-Z].*son/ });
+      expect(query.build()).to.equal('WHERE name =~ $name');
+      expect(query.getParams()).to.deep.equal({
+        name: '[A-Z].*son',
+      });
+    });
+
+    it('should compile with a regular expression with flags', () => {
+      const query = new Where({ name: /.*son/i });
+      expect(query.build()).to.equal('WHERE name =~ $name');
+      expect(query.getParams()).to.deep.equal({
+        name: '.*son',
+      });
+    });
   });
 });
